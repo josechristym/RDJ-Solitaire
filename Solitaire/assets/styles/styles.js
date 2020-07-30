@@ -1,6 +1,6 @@
 export const POSITIONS = {
   APP: {
-    paddingTop: 100,
+    // paddingTop: 50,
     flex: 1,
     flexDirection: 'column'
   },
@@ -25,7 +25,7 @@ export const CARD = {
   },
   DIMENSIONS: {
     width: 45,
-    height: 70
+    height: 70,
   },
   FACE_BACKGROUND: {
     width: '100%',
@@ -54,6 +54,7 @@ export const GENERIC_STACK = {
     borderWidth: 1,
     borderColor: 'grey',
     ...CARD.DIMENSIONS,
+    backgroundColor:'rgba(0,0,0,0.6)',
   }
 }
 
@@ -72,12 +73,14 @@ export const STYLE_CENTER = {
 
 export const MENUBAR = {
   height: 40,
-  backgroundColor: 'rgba(0,0,0,0.5)',
+  backgroundColor:'rgba(0,0,0,0.5)',
   width: '100%',
   flexDirection: 'row',
   justifyContent: 'space-between',
 }
 
 export const MENUBAR_TEXT = {
-  color: 'white'
+  color: 'white',
+  fontSize:16,
+  fontWeight:'bold'
 }

@@ -24,7 +24,7 @@ export default class MenuBar extends React.Component {
         {this.props.canAutoComplete && !this.props.gameFinished && <TouchableOpacity style={{...MENUBAR, ...STYLE_CENTER}} onPress={this.props.autoComplete}>
           <Text style={MENUBAR_TEXT}>Autocomplete?</Text>
         </TouchableOpacity>}
-        <View style={Object.assign({}, MENUBAR, {backgroundColor: 'transparent', height: 25})}>
+        <View style={Object.assign({}, MENUBAR, {height: 25})}>
           <Text style={MENUBAR_TEXT}>
             Time: {timeMinutes}{timeSeconds < 10 ? '0' + timeSeconds : timeSeconds}
           </Text>

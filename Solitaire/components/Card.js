@@ -6,7 +6,7 @@ const { DIMENSIONS, FACE_BACKGROUND, VALUE, CONTAINER, SUIT_IMAGE } = CARD
 
 const Card = ({meta, style, onPress}) => {
   if (meta.isFaceDown) {
-    return <Image source={require('../assets/images/card_back.png')} style={{...DIMENSIONS, ...style}} resizeMode="contain" />
+    return <Image source={require('../assets/images/card_back.png')} style={{...DIMENSIONS, ...style,borderColor:'grey',borderWidth:1,borderRadius:3}} resizeMode="cover" />
   }
   const pressCard = (evt) => {
     evt.preventDefault()
@@ -25,7 +25,7 @@ const Card = ({meta, style, onPress}) => {
     }
   }
   return (
-    <View style={{...CONTAINER, ...DIMENSIONS, ...style}}>
+    <View style={{...CONTAINER, ...DIMENSIONS, ...style, overflow:'hidden',borderColor:'gray',borderWidth:1,borderRadius:3}}>
       <Image source={require('../assets/images/card_face.png')} resizeMode="cover" style={{...FACE_BACKGROUND}} />
       <TouchableOpacity onPress={pressCard}>
         <View style={{...DIMENSIONS, alignItems: 'center', justifyContent: 'center'}}>

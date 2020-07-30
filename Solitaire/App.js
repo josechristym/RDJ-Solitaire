@@ -387,7 +387,7 @@ export default class App extends React.Component {
     const handEmpty = this.state.hand.length === 0
     return (
       <TouchableOpacity onPress={this.clickHandStack}>
-        {!handEmpty && <Image source={require('./assets/images/card_back.png')} style={CARD.DIMENSIONS} resizeMode="contain" />}
+        {!handEmpty && <Image source={require('./assets/images/card_back.png')} style={[CARD.DIMENSIONS,{borderColor:'grey',borderWidth:1,borderRadius:3}]} resizeMode="cover" />}
         {handEmpty && <Image
           source={require('./assets/images/undo.png')}
           style={{
@@ -405,7 +405,8 @@ export default class App extends React.Component {
   render () {
     return (
       <View style={POSITIONS.APP}>
-        <Image source={require('./assets/images/green_felt.jpg')} resizeMode="contain" style={{position: 'absolute'}} />
+        <Image source={require('./assets/images/green_felt.png')} resizeMode="cover" style={{position: 'absolute'}} />
+        <View style={{height:50,backgroundColor: 'rgba(0,0,0,0.5)',marginBottom:50}}></View>
         <View style={{flex:1,marginHorizontal:10}}>
         <View style={{height: 150, flexDirection: 'row'}}>
           <View style={POSITIONS.SECONDARY_ROW}>
