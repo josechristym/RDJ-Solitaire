@@ -426,8 +426,8 @@ export default class Board extends React.Component {
           </View>
         </View>
         <View style={POSITIONS.SECONDARY_ROW}>
-          {this.state.gameFinished && this.renderTableau()}
-          {!this.state.gameFinished && <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor:'rgba(0,0,0,0.5)'}}>
+          {!this.state.gameFinished && this.renderTableau()}
+          {this.state.gameFinished && <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor:'rgba(0,0,0,0.5)'}}>
           <Image source={require('../assets/images/winner.gif')} resizeMode="cover" style={{position: 'absolute'}} />
             <Text style={{backgroundColor: 'transparent', fontSize: 40,color:'#F9F3F1'}}>
                 Winner!
