@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Solitaire</string>
+    <string name="splash_image_view">splash_image_view</string>
 </resources>

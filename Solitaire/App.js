@@ -8,6 +8,7 @@ import { CARD, POSITIONS } from './assets/styles/styles'
 import TableauStack from './components/TableauStack'
 import GenericStack from './components/GenericStack'
 import MenuBar from './components/MenuBar'
+import SplashScreen from 'react-native-splash-screen'
 
 export default class App extends React.Component {
 
@@ -36,6 +37,7 @@ export default class App extends React.Component {
   }
 
   componentWillMount () {
+    SplashScreen.hide();
     this.deal()
   }
 
