@@ -3,6 +3,7 @@ import { View, Image, TouchableOpacity, Text, Linking } from 'react-native'
 import { POSITIONS } from '../assets/styles/styles'
 import Icon from 'react-native-vector-icons/Octicons';
 import MatIcon from 'react-native-vector-icons/MaterialIcons';  
+import { BannerView } from 'react-native-fbads';
 
 export default class GameInfo extends React.Component {
 
@@ -19,7 +20,7 @@ export default class GameInfo extends React.Component {
   }
 
   onPressCompose=()=>{
-    Linking.openURL('mailto:3tcashout@gmail.com?subject=Issue in check out&body=""')
+    Linking.openURL('mailto:3tcashout@gmail.com')
   }
 
   render () {
@@ -51,6 +52,13 @@ export default class GameInfo extends React.Component {
             </Text>
           </TouchableOpacity>
         </View>
+        <BannerView
+          placementId="950980425405826_950981308739071"
+          type="standard"
+          onPress={() => console.log('click')}
+          onLoad={() => console.log('loaded')}
+          onError={err => { this.setState({ showFBAds: false }) }}
+        />
       </View>
     )
   }

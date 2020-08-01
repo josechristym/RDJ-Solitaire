@@ -11,17 +11,18 @@ import MenuBar from '../components/MenuBar'
 import SplashScreen from 'react-native-splash-screen'
 import Icon from 'react-native-vector-icons/Entypo';
 import MatIcon from 'react-native-vector-icons/MaterialIcons';
+import { BannerView, InterstitialAdManager } from 'react-native-fbads';
 
 export default class Board extends React.Component {
 
   static navigationOptions = { title: 'Welcome', header: null };
 
-  constructor () {
+  constructor() {
     super()
     const deck = this.shuffle()
     this.state = {
       deck,
-      board_bg:"",
+      board_bg: "",
       gameFinished: false,
       moves: 115,
       timeSince: 0,
@@ -41,24 +42,24 @@ export default class Board extends React.Component {
       arrImages: [require('../assets/images/green_felt.png'),
       require('../assets/images/green_felt1.jpg'),
       require('../assets/images/green_felt2.png')],
-      get_rewards:0
+      get_rewards: 0
     }
   }
 
-  componentWillMount () {
-    AsyncStorage.getItem('get_rewards').then((value) => { 
-      console.log("get_rewards",value) 
-      if(value !== undefined && value !== null){
+  componentWillMount() {
+    AsyncStorage.getItem('get_rewards').then((value) => {
+      console.log("get_rewards", value)
+      if (value !== undefined && value !== null) {
         let reward = Number((JSON.parse(value)).toFixed(2));
-        this.setState({ 'get_rewards':  reward})
+        this.setState({ 'get_rewards': reward })
       }
     })
-    AsyncStorage.getItem('board_bg').then((value) => { 
-      if(value !== undefined && value !== null){
+    AsyncStorage.getItem('board_bg').then((value) => {
+      if (value !== undefined && value !== null) {
         console.log(JSON.parse(value))
         let image = this.state.arrImages[JSON.parse(value)];
-        this.setState({ 'board_bg': image})
-      }else{
+        this.setState({ 'board_bg': image })
+      } else {
         //
         this.setState({ 'board_bg': require('../assets/images/green_felt.png') })
       }
@@ -66,7 +67,7 @@ export default class Board extends React.Component {
     SplashScreen.hide();
     this.deal()
   }
-  componentDidUpdate (prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState) {
     const { tableau, clickedAutoComplete, canAutoComplete, gameFinished, points, timeSince, foundations } = this.state
     const { hearts, diamonds, spades, clubs } = foundations
     if (tableau.length > 0) {
@@ -80,15 +81,15 @@ export default class Board extends React.Component {
       }, 0)
       if (faceDownInTableau <= 0) {
         if (!canAutoComplete) {
-          this.setState({canAutoComplete: true})
+          this.setState({ canAutoComplete: true })
         }
         // Game over
         else if (hearts.length + diamonds.length + spades.length + clubs.length === 52 && !gameFinished) {
-          var get_rewards = ((points + Number((700000 / timeSince).toFixed()))/this.state.moves)/100
+          var get_rewards = ((points + Number((700000 / timeSince).toFixed())) / this.state.moves) / 100
           get_rewards = get_rewards > 0 ? parseInt(this.state.get_rewards) + get_rewards : this.state.get_rewards + 0.05
           get_rewards = Number((get_rewards).toFixed(2));
-          AsyncStorage.setItem('get_rewards',JSON.stringify(get_rewards))
-          this.setState({get_rewards, gameFinished: true, points: points + Number((700000 / timeSince).toFixed())})
+          AsyncStorage.setItem('get_rewards', JSON.stringify(get_rewards))
+          this.setState({ get_rewards, gameFinished: true, points: points + Number((700000 / timeSince).toFixed()) })
         }
       }
     }
@@ -96,15 +97,24 @@ export default class Board extends React.Component {
       setTimeout(this.autoComplete, 0)
     }
     if (this.state.points < 0) {
-      this.setState({points: 0})
+      this.setState({ points: 0 })
     }
   }
 
-  componentDidMount () {
-    this.timer = setInterval(() => this.setState(state => {
+  componentDidMount() {
+    this.timer = setInterval(() => {
+      const timeSeconds = this.state.timeSince % 60
+      if(timeSeconds === 0){
+        console.log("this.state.timeSince",timeSeconds)
+        InterstitialAdManager.showAd("950980425405826_950983288738873")
+        .then(didClick => {})
+        .catch(error => {});
+      }
+      this.setState(state => {
       state.timeSince += 1
       return state
-    }), 1000)
+    })
+  }, 1000)
   }
 
   /**
@@ -209,8 +219,8 @@ export default class Board extends React.Component {
     }, this.deal)
   }
 
-  getNumericCardValue (card) {
-    card = card || {value: '0'}
+  getNumericCardValue(card) {
+    card = card || { value: '0' }
     let cardValue = card.value
     if (card.value === 'A') {
       cardValue = '1'
@@ -224,7 +234,7 @@ export default class Board extends React.Component {
     return Number(cardValue)
   }
 
-  getActualCardValue (cardValue) {
+  getActualCardValue(cardValue) {
     cardValue = cardValue || 1
     if (cardValue === 1) {
       return 'A'
@@ -330,7 +340,7 @@ export default class Board extends React.Component {
     } else {
       waste.push(hand.pop())
     }
-    this.setState({waste, hand, points})
+    this.setState({ waste, hand, points })
   }
 
   moveCardWithValue = (value, suit) => {
@@ -345,7 +355,7 @@ export default class Board extends React.Component {
     })
     const cardToMoveFromWaste = findIndex(this.state.waste, card => card.value === actualCardValue && card.type === suit)
     if (tableauIndexWithCard >= 0) {
-      this.clickTableauStack({value: actualCardValue, type: suit}, tableauIndexWithCard)
+      this.clickTableauStack({ value: actualCardValue, type: suit }, tableauIndexWithCard)
       return true
     } else if (cardToMoveFromWaste >= 0) {
       this.acceptUserMove()
@@ -418,7 +428,7 @@ export default class Board extends React.Component {
     const handEmpty = this.state.hand.length === 0
     return (
       <TouchableOpacity onPress={this.clickHandStack}>
-        {!handEmpty && <Image source={require('../assets/images/card_back.png')} style={[CARD.DIMENSIONS,{borderColor:'grey',borderWidth:1,borderRadius:3}]} resizeMode="cover" />}
+        {!handEmpty && <Image source={require('../assets/images/card_back.png')} style={[CARD.DIMENSIONS, { borderColor: 'grey', borderWidth: 1, borderRadius: 3 }]} resizeMode="cover" />}
         {handEmpty && <Image
           source={require('../assets/images/undo.png')}
           style={{
@@ -432,7 +442,7 @@ export default class Board extends React.Component {
       </TouchableOpacity>
     )
   }
-  
+
   onPressInfo = () => {
     this.props.navigation.navigate('GameInfo')
   }
@@ -442,62 +452,69 @@ export default class Board extends React.Component {
   }
 
   onPressChangeBG = () => {
-    this.props.navigation.navigate('CameraRoll',{onbgSelected:this.onbgSelected})
+    this.props.navigation.navigate('CameraRoll', { onbgSelected: this.onbgSelected })
   }
 
   onbgSelected = () => {
-    AsyncStorage.getItem('board_bg').then((value) => { 
-      if(value !== undefined && value !== null){
+    AsyncStorage.getItem('board_bg').then((value) => {
+      if (value !== undefined && value !== null) {
         let image = this.state.arrImages[JSON.parse(value)];
-        this.setState({ 'board_bg': image})
-      }else{
+        this.setState({ 'board_bg': image })
+      } else {
         this.setState({ 'board_bg': require('../assets/images/green_felt.png') })
       }
     })
   }
 
-  render () {
+  render() {
     return (
       <View style={POSITIONS.APP}>
-        <Image source={this.state.board_bg} resizeMode="cover" style={{position: 'absolute'}} />
-        <View style={{height:50,backgroundColor: 'rgba(0,0,0,0.5)',marginBottom:50,alignItems:"center", flexDirection:'row'}}>
-          <TouchableOpacity onPress={this.onPressInfo}><Icon name="info-with-circle" size={25} color="#F9F3F1" style={{marginLeft:20,height:30, width:30}}/></TouchableOpacity>
-          <TouchableOpacity onPress={this.onPressChangeBG}><MatIcon name="camera-roll" size={25} color="#F9F3F1" style={{marginLeft:20,height:30, width:30}}/></TouchableOpacity>
-          <TouchableOpacity onPress={this.onPressPayment}><MatIcon name="payment" size={25} color="#F9F3F1" style={{marginLeft:20,height:30, width:30}}/></TouchableOpacity>
-    <View style={{alignItems:"flex-end",flex:1,justifyContent:"center"}}><Text style={{backgroundColor: 'transparent', fontSize: 15,color:'#F9F3F1', textAlign:'right', marginRight:20,height:30,lineHeight:30, width:100}}>${this.state.get_rewards}</Text></View>
+        <Image source={this.state.board_bg} resizeMode="cover" style={{ position: 'absolute' }} />
+        <View style={{ height: 50, backgroundColor: 'rgba(0,0,0,0.5)', marginBottom: 50, alignItems: "center", flexDirection: 'row' }}>
+          <TouchableOpacity onPress={this.onPressInfo}><Icon name="info-with-circle" size={25} color="#F9F3F1" style={{ marginLeft: 20, height: 30, width: 30 }} /></TouchableOpacity>
+          <TouchableOpacity onPress={this.onPressChangeBG}><MatIcon name="camera-roll" size={25} color="#F9F3F1" style={{ marginLeft: 20, height: 30, width: 30 }} /></TouchableOpacity>
+          <TouchableOpacity onPress={this.onPressPayment}><MatIcon name="payment" size={25} color="#F9F3F1" style={{ marginLeft: 20, height: 30, width: 30 }} /></TouchableOpacity>
+          <View style={{ alignItems: "flex-end", flex: 1, justifyContent: "center" }}><Text style={{ backgroundColor: 'transparent', fontSize: 15, color: '#F9F3F1', textAlign: 'right', marginRight: 20, height: 30, lineHeight: 30, width: 100 }}>${this.state.get_rewards}</Text></View>
         </View>
-        <View style={{flex:1,marginHorizontal:10}}>
-        <View style={{height: 150, flexDirection: 'row'}}>
-          <View style={POSITIONS.SECONDARY_ROW}>
-            {this.renderFoundations()}
-            <View style={CARD.DIMENSIONS}/>
-            <GenericStack stack={this.state.waste} onPress={this.clickWasteStack} />
-            {this.renderHandStack()}
+        <View style={{ flex: 1, marginHorizontal: 10 }}>
+          <View style={{ height: 150, flexDirection: 'row' }}>
+            <View style={POSITIONS.SECONDARY_ROW}>
+              {this.renderFoundations()}
+              <View style={CARD.DIMENSIONS} />
+              <GenericStack stack={this.state.waste} onPress={this.clickWasteStack} />
+              {this.renderHandStack()}
+            </View>
           </View>
-        </View>
-        <View style={POSITIONS.SECONDARY_ROW}>
-          {!this.state.gameFinished && this.renderTableau()}
-          {this.state.gameFinished && <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor:'rgba(0,0,0,0.5)'}}>
-          <Image source={require('../assets/images/winner.gif')} resizeMode="cover" style={{position: 'absolute'}} />
-            <Text style={{backgroundColor: 'transparent', fontSize: 40,color:'#F9F3F1'}}>
+          <View style={POSITIONS.SECONDARY_ROW}>
+            {!this.state.gameFinished && this.renderTableau()}
+            {this.state.gameFinished && <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }}>
+              <Image source={require('../assets/images/winner.gif')} resizeMode="cover" style={{ position: 'absolute' }} />
+              <Text style={{ backgroundColor: 'transparent', fontSize: 40, color: '#F9F3F1' }}>
                 Winner!
             </Text>
-          </View>}
+            </View>}
+          </View>
+          <View style={POSITIONS.SECONDARY_ROW}>
+            <MenuBar
+              totalMoves={this.state.moves}
+              timeSince={this.state.timeSince}
+              points={this.state.points}
+              canAutoComplete={this.state.canAutoComplete}
+              gameFinished={this.state.gameFinished}
+              replayGame={this.replayGame}
+              newGame={this.newGame}
+              undoMove={this.undoMove}
+              autoComplete={this.autoComplete}
+            />
+          </View>
         </View>
-        <View style={POSITIONS.SECONDARY_ROW}>
-          <MenuBar
-            totalMoves={this.state.moves}
-            timeSince={this.state.timeSince}
-            points={this.state.points}
-            canAutoComplete={this.state.canAutoComplete}
-            gameFinished={this.state.gameFinished}
-            replayGame={this.replayGame}
-            newGame={this.newGame}
-            undoMove={this.undoMove}
-            autoComplete={this.autoComplete}
-          />
-        </View>
-      </View>
+        <BannerView
+          placementId="950980425405826_950981308739071"
+          type="standard"
+          onPress={() => console.log('click')}
+          onLoad={() => console.log('loaded')}
+          onError={err => { this.setState({ showFBAds: false }) }}
+        />
       </View>
     )
   }

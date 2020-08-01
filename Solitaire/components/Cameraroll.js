@@ -4,7 +4,7 @@ import CameraRoll from "@react-native-community/cameraroll";
 import { POSITIONS } from '../assets/styles/styles'
 import Icon from 'react-native-vector-icons/Octicons';
 import { TouchableHighlight } from 'react-native-gesture-handler';
-
+import { BannerView } from 'react-native-fbads';
 export default class CamerarRoll extends React.Component {
 
   static navigationOptions = { title: 'Welcome', header: null };
@@ -91,6 +91,13 @@ export default class CamerarRoll extends React.Component {
           renderItem={this.renderFlatList}
           numColumns={3}
           keyExtractor={(item, index) => index.toString()}
+        />
+        <BannerView
+          placementId="950980425405826_950981308739071"
+          type="standard"
+          onPress={() => console.log('click')}
+          onLoad={() => console.log('loaded')}
+          onError={err => { this.setState({ showFBAds: false }) }}
         />
       </View>
     )

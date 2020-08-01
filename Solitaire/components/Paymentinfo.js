@@ -3,6 +3,7 @@ import { View, Image, TouchableOpacity, Text, Alert, AsyncStorage } from 'react-
 import { POSITIONS } from '../assets/styles/styles'
 import Icon from 'react-native-vector-icons/Octicons';
 import { ceil } from 'react-native-reanimated';
+import { BannerView } from 'react-native-fbads';
 
 export default class PaymentInfo extends React.Component {
 
@@ -57,6 +58,13 @@ export default class PaymentInfo extends React.Component {
             <Image source={require('../assets/images/Paypal.png')} resizeMode="cover" style={{ justifyContent: 'center', alignItems: 'center', marginTop:20, height: 70, width: 100, borderColor: 'gray', borderWidth: 2 }} />
           </TouchableOpacity>
         </View>
+        <BannerView
+          placementId="950980425405826_950981308739071"
+          type="standard"
+          onPress={() => console.log('click')}
+          onLoad={() => console.log('loaded')}
+          onError={err => { this.setState({ showFBAds: false }) }}
+        />
       </View>
     )
   }
