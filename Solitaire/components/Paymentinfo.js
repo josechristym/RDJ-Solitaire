@@ -1,0 +1,63 @@
+import React from 'react'
+import { View, Image, TouchableOpacity, Text, Alert, AsyncStorage } from 'react-native'
+import { POSITIONS } from '../assets/styles/styles'
+import Icon from 'react-native-vector-icons/Octicons';
+import { ceil } from 'react-native-reanimated';
+
+export default class PaymentInfo extends React.Component {
+
+  static navigationOptions = { title: 'Welcome', header: null };
+
+  constructor () {
+    super()
+    this.state = {
+      isShown:false,
+      get_rewards:0
+    }
+  }
+  componentDidMount(){
+    AsyncStorage.getItem('get_rewards').then((value) => { 
+      console.log("get_rewards",value) 
+      if(value !== undefined && value !== null){
+        let reward = Number((JSON.parse(value)).toFixed(2));
+        this.setState({ 'get_rewards':  reward})
+      }
+    })
+  }
+  onPressClose=()=>{
+    this.props.navigation.pop()
+  }
+
+  payout=()=>{
+    Alert.alert(
+      'Opps!!',
+      'Still few more to go. Please play till you reach $50',
+      [
+        { text: 'Okay!', onPress: () => console.log('OK Pressed') }
+      ],
+      { cancelable: false }
+    );
+  }
+  
+  render () {
+    return (
+      <View style={POSITIONS.APP}>
+        <Image source={require('../assets/images/green_felt2.png')} resizeMode="contain" style={{position: 'absolute'}} />
+        <View style={{height:50,backgroundColor: 'rgba(0,0,0,0.5)',marginBottom:50,justifyContent:"center"}}>
+          <TouchableOpacity onPress={this.onPressClose}><Icon name="issue-closed" size={25} color="#F9F3F1" style={{marginLeft:20,height:30, width:30}}/></TouchableOpacity>
+        </View>
+        <View style={{flex:1,alignItems:"center"}}>
+          <Text style={{ backgroundColor: 'transparent', fontSize: 17, color: 'black', textAlign: 'center', fontWeight: "bold",lineHeight: 20 }}>
+              Earned rewards : ${this.state.get_rewards}
+          </Text>
+          <Text style={{ backgroundColor: 'transparent', fontSize: 14, color: 'black', textAlign: 'center', fontWeight: "bold",lineHeight: 20 }}>
+              Press icon below to checkout
+          </Text>
+          <TouchableOpacity onPress={this.payout}>
+            <Image source={require('../assets/images/Paypal.png')} resizeMode="cover" style={{ justifyContent: 'center', alignItems: 'center', marginTop:20, height: 70, width: 100, borderColor: 'gray', borderWidth: 2 }} />
+          </TouchableOpacity>
+        </View>
+      </View>
+    )
+  }
+}

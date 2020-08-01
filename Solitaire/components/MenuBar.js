@@ -29,7 +29,7 @@ export default class MenuBar extends React.Component {
         {this.props.canAutoComplete && !this.props.gameFinished && <TouchableOpacity style={{...MENUBAR, ...STYLE_CENTER}} onPress={this.props.autoComplete}>
           <Text style={MENUBAR_TEXT}>Autocomplete?</Text>
         </TouchableOpacity>}
-        <View style={Object.assign({}, MENUBAR, {height: 25})}>
+        <View style={Object.assign({}, MENUBAR, {height: 25,paddingHorizontal:10})}>
           <View style={{flexDirection:"row"}}>
             <Icon name="time-slot" size={20} color="#F9F3F1" style={{height:20, width:20}}/>
             <Text style={MENUBAR_TEXT}>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Image, TouchableOpacity, Text } from 'react-native'
+import { View, Image, TouchableOpacity, Text, AsyncStorage } from 'react-native'
 import findIndex from 'lodash/findIndex'
 import cloneDeep from 'lodash/cloneDeep'
 
@@ -10,6 +10,7 @@ import GenericStack from '../components/GenericStack'
 import MenuBar from '../components/MenuBar'
 import SplashScreen from 'react-native-splash-screen'
 import Icon from 'react-native-vector-icons/Entypo';
+import MatIcon from 'react-native-vector-icons/MaterialIcons';
 
 export default class Board extends React.Component {
 
@@ -20,10 +21,11 @@ export default class Board extends React.Component {
     const deck = this.shuffle()
     this.state = {
       deck,
+      board_bg:"",
       gameFinished: false,
-      moves: 0,
+      moves: 115,
       timeSince: 0,
-      points: 0,
+      points: 225,
       lastUserMove: {},
       canAutoComplete: false,
       clickedAutoComplete: false,
@@ -35,15 +37,35 @@ export default class Board extends React.Component {
         clubs: []
       },
       hand: [...deck], // AKA "Stock": remaining cards form the stock pile
-      waste: [] // AKA "Talon":  Cards from stock pile with no place in tableau or foundations are face up in waste pile
+      waste: [], // AKA "Talon":  Cards from stock pile with no place in tableau or foundations are face up in waste pile
+      arrImages: [require('../assets/images/green_felt.png'),
+      require('../assets/images/green_felt1.jpg'),
+      require('../assets/images/green_felt2.png')],
+      get_rewards:0
     }
   }
 
   componentWillMount () {
+    AsyncStorage.getItem('get_rewards').then((value) => { 
+      console.log("get_rewards",value) 
+      if(value !== undefined && value !== null){
+        let reward = Number((JSON.parse(value)).toFixed(2));
+        this.setState({ 'get_rewards':  reward})
+      }
+    })
+    AsyncStorage.getItem('board_bg').then((value) => { 
+      if(value !== undefined && value !== null){
+        console.log(JSON.parse(value))
+        let image = this.state.arrImages[JSON.parse(value)];
+        this.setState({ 'board_bg': image})
+      }else{
+        //
+        this.setState({ 'board_bg': require('../assets/images/green_felt.png') })
+      }
+    })
     SplashScreen.hide();
     this.deal()
   }
-
   componentDidUpdate (prevProps, prevState) {
     const { tableau, clickedAutoComplete, canAutoComplete, gameFinished, points, timeSince, foundations } = this.state
     const { hearts, diamonds, spades, clubs } = foundations
@@ -62,7 +84,11 @@ export default class Board extends React.Component {
         }
         // Game over
         else if (hearts.length + diamonds.length + spades.length + clubs.length === 52 && !gameFinished) {
-          this.setState({gameFinished: true, points: points + Number((700000 / timeSince).toFixed())})
+          var get_rewards = ((points + Number((700000 / timeSince).toFixed()))/this.state.moves)/100
+          get_rewards = get_rewards > 0 ? parseInt(this.state.get_rewards) + get_rewards : this.state.get_rewards + 0.05
+          get_rewards = Number((get_rewards).toFixed(2));
+          AsyncStorage.setItem('get_rewards',JSON.stringify(get_rewards))
+          this.setState({get_rewards, gameFinished: true, points: points + Number((700000 / timeSince).toFixed())})
         }
       }
     }
@@ -406,15 +432,39 @@ export default class Board extends React.Component {
       </TouchableOpacity>
     )
   }
+  
   onPressInfo = () => {
     this.props.navigation.navigate('GameInfo')
   }
+
+  onPressPayment = () => {
+    this.props.navigation.navigate('PaymentInfo')
+  }
+
+  onPressChangeBG = () => {
+    this.props.navigation.navigate('CameraRoll',{onbgSelected:this.onbgSelected})
+  }
+
+  onbgSelected = () => {
+    AsyncStorage.getItem('board_bg').then((value) => { 
+      if(value !== undefined && value !== null){
+        let image = this.state.arrImages[JSON.parse(value)];
+        this.setState({ 'board_bg': image})
+      }else{
+        this.setState({ 'board_bg': require('../assets/images/green_felt.png') })
+      }
+    })
+  }
+
   render () {
     return (
       <View style={POSITIONS.APP}>
-        <Image source={require('../assets/images/green_felt.png')} resizeMode="cover" style={{position: 'absolute'}} />
-        <View style={{height:50,backgroundColor: 'rgba(0,0,0,0.5)',marginBottom:50,justifyContent:"center"}}>
+        <Image source={this.state.board_bg} resizeMode="cover" style={{position: 'absolute'}} />
+        <View style={{height:50,backgroundColor: 'rgba(0,0,0,0.5)',marginBottom:50,alignItems:"center", flexDirection:'row'}}>
           <TouchableOpacity onPress={this.onPressInfo}><Icon name="info-with-circle" size={25} color="#F9F3F1" style={{marginLeft:20,height:30, width:30}}/></TouchableOpacity>
+          <TouchableOpacity onPress={this.onPressChangeBG}><MatIcon name="camera-roll" size={25} color="#F9F3F1" style={{marginLeft:20,height:30, width:30}}/></TouchableOpacity>
+          <TouchableOpacity onPress={this.onPressPayment}><MatIcon name="payment" size={25} color="#F9F3F1" style={{marginLeft:20,height:30, width:30}}/></TouchableOpacity>
+    <View style={{alignItems:"flex-end",flex:1,justifyContent:"center"}}><Text style={{backgroundColor: 'transparent', fontSize: 15,color:'#F9F3F1', textAlign:'right', marginRight:20,height:30,lineHeight:30, width:100}}>${this.state.get_rewards}</Text></View>
         </View>
         <View style={{flex:1,marginHorizontal:10}}>
         <View style={{height: 150, flexDirection: 'row'}}>

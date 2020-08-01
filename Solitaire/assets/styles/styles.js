@@ -64,6 +64,7 @@ export const MENUBAR_AREA = {
   width: '100%',
   flexDirection: 'column',
   justifyContent: 'center',
+  
 }
 
 export const STYLE_CENTER = {
@@ -77,6 +78,7 @@ export const MENUBAR = {
   width: '100%',
   flexDirection: 'row',
   justifyContent: 'space-between',
+  paddingHorizontal:10
 }
 
 export const MENUBAR_TEXT = {

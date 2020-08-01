@@ -5,7 +5,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 //Components
 import Board from './components/Board'
-import GameInfo from './components/gameinfo'
+import GameInfo from './components/Gameinfo'
+import PaymentInfo from './components/Paymentinfo'
+import CameraRoll from './components/Cameraroll'
 
 const Stack = createStackNavigator();
 
@@ -15,6 +17,8 @@ function RootComponent() {
       <Stack.Navigator initialRouteName="Board">
         <Stack.Screen name="Board" component={Board} options={{ headerShown: false }}/>
         <Stack.Screen name="GameInfo" component={GameInfo} options={{ headerShown: false }}/>
+        <Stack.Screen name="PaymentInfo" component={PaymentInfo} options={{ headerShown: false }}/>
+        <Stack.Screen name="CameraRoll" component={CameraRoll} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
