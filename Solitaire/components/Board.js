@@ -24,9 +24,9 @@ export default class Board extends React.Component {
       deck,
       board_bg: "",
       gameFinished: false,
-      moves: 115,
+      moves: 0,
       timeSince: 0,
-      points: 225,
+      points: 0,
       lastUserMove: {},
       canAutoComplete: false,
       clickedAutoComplete: false,
@@ -86,9 +86,11 @@ export default class Board extends React.Component {
         // Game over
         else if (hearts.length + diamonds.length + spades.length + clubs.length === 52 && !gameFinished) {
           var get_rewards = ((points + Number((700000 / timeSince).toFixed())) / this.state.moves) / 100
-          get_rewards = get_rewards > 0 ? parseInt(this.state.get_rewards) + get_rewards : this.state.get_rewards + 0.05
+          console.log("get_rewards",get_rewards,this.state.get_rewards)
+          get_rewards = get_rewards > 0 ? this.state.get_rewards + get_rewards : this.state.get_rewards + 0.05
           get_rewards = Number((get_rewards).toFixed(2));
-          AsyncStorage.setItem('get_rewards', JSON.stringify(get_rewards))
+          console.log("get_rewards",get_rewards,this.state.get_rewards)
+          AsyncStorage.setItem('get_rewards', get_rewards.toString())
           this.setState({ get_rewards, gameFinished: true, points: points + Number((700000 / timeSince).toFixed()) })
         }
       }

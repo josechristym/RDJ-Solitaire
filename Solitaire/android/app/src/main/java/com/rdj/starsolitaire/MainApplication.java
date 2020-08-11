@@ -1,9 +1,10 @@
-package com.solitaire;
+package com.rdj.starsolitaire;
 
 import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.netinfo.NetInfoPackage;
 import suraj.tiwari.reactnativefbads.FBAdsPackage;
 import com.reactnativecommunity.cameraroll.CameraRollPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -66,7 +67,7 @@ public class MainApplication extends Application implements ReactApplication {
          We use reflection here to pick up the class that initializes Flipper,
         since Flipper library is not available in release mode
         */
-        Class<?> aClass = Class.forName("com.solitaire.ReactNativeFlipper");
+        Class<?> aClass = Class.forName("com.rdj.starsolitaire.ReactNativeFlipper");
         aClass
             .getMethod("initializeFlipper", Context.class, ReactInstanceManager.class)
             .invoke(null, context, reactInstanceManager);

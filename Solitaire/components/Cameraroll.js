@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Image, TouchableOpacity, Text, FlatList, PermissionsAndroid, Platform, AsyncStorage } from 'react-native'
 import CameraRoll from "@react-native-community/cameraroll";
 import { POSITIONS } from '../assets/styles/styles'
-import Icon from 'react-native-vector-icons/Octicons';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import { BannerView } from 'react-native-fbads';
 export default class CamerarRoll extends React.Component {
@@ -78,7 +78,7 @@ export default class CamerarRoll extends React.Component {
       <View style={POSITIONS.APP}>
         <Image source={require('../assets/images/green_felt2.png')} resizeMode="contain" style={{ position: 'absolute' }} />
         <View style={{ height: 50, backgroundColor: 'rgba(0,0,0,0.5)', alignItems: "center", flexDirection: 'row' }}>
-          <TouchableOpacity onPress={this.onPressClose}><Icon name="issue-closed" size={25} color="#F9F3F1" style={{ marginLeft: 20, height: 30, width: 30 }} /></TouchableOpacity>
+          <TouchableOpacity onPress={this.onPressClose}><Icon name="chevron-back" size={25} color="#F9F3F1" style={{ marginLeft: 20, height: 30, width: 30 }} /></TouchableOpacity>
           <View style={{ alignItems: "center", flex: 1, justifyContent: "center", marginLeft: -30 }}>
             <Text style={{ backgroundColor: 'transparent', fontSize: 18, color: '#F9F3F1', textAlign: 'center', fontWeight: "bold", marginRight: 20, height: 30, lineHeight: 30 }}>
               Pick Background

@@ -3,7 +3,7 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '10.0'
 
-target 'Solitaire' do
+target 'StarSolitaire' do
   config = use_native_modules!
 
   use_react_native!(:path => config["reactNativePath"])
@@ -16,7 +16,9 @@ target 'Solitaire' do
 
   pod 'ReactNativeAdsFacebook', :path => '../node_modules/react-native-fbads'
 
-  target 'SolitaireTests' do
+  pod 'react-native-netinfo', :path => '../node_modules/@react-native-community/netinfo'
+
+  target 'StarSolitaireTests' do
     inherit! :complete
     # Pods for testing
   end
@@ -31,10 +33,10 @@ target 'Solitaire' do
   end
 end
 
-target 'Solitaire-tvOS' do
-  # Pods for Solitaire-tvOS
+target 'StarSolitaire-tvOS' do
+  # Pods for StarSolitaire-tvOS
 
-  target 'Solitaire-tvOSTests' do
+  target 'StarSolitaire-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
   end

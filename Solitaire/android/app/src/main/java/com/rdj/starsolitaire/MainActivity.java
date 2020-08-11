@@ -1,4 +1,4 @@
-package com.solitaire;
+package com.rdj.starsolitaire;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
@@ -15,7 +15,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "Solitaire";
+    return "StarSolitaire";
   }
   public void onCreate(Bundle savedInstanceState){
     SplashScreen.show(this);
